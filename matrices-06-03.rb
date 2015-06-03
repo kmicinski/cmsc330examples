@@ -34,17 +34,19 @@ class Matrix
     Matrix.new(sum)
   end
   
-  def add(m)
-    m1 = @mat
-    m2 = m.mat
-    sum = Array.new(self.rows,Array.new())
-    
-    for i in 0...self.rows
-      for j in 0...self.columns
-        sum[i][j] = m1[i][j] + m2[i][j]
+  def product(b)
+    n = self.rows
+    m = self.columns
+    p = b.columns
+    prod = Array.new(n,[])
+    n.times do |i| 
+      p.times do |j|
+        sum = 0
+        (0...m).each { |k| sum = sum + @mat[i][k] * b.mat[k][j] }
+        prod[i][j] = sum
       end
     end
-    Matrix.new(sum)
+    Matrix.new(prod)
   end
 end
 
