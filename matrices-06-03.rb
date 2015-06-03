@@ -1,4 +1,6 @@
 # Ruby Matrix interpreter for CMSC 330
+# Run this with 
+#     ruby matrices-06-03.rb ./file.mat
 # 
 # @author Kris Micinski
 

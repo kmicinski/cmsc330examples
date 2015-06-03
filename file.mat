@@ -1,0 +1,5 @@
+store { b } { [ [ 1 0 ] [ 0 1 ] ]  }
+store { a } { [ [ 1 0 ] [ 0 1 ] ]  }
+hello
+multiply { a } { b } { c } 
+print { c }
