@@ -4,11 +4,19 @@
 # 
 # @author Kris Micinski
 
-## Matrices
-## Copied from class 1
+# A representation for matrices that performs various operations on
+# them, using a Ruby array of arrays as the internal representation.
 class Matrix
+  # Define an accessor for the internal (array of arrays)
+  # representation
   attr_accessor :mat
-  
+
+  # @param mat [Array[Array[Fixnum]]] The array based representation
+  # of matrices: 
+  # 
+  # [ [ 1, 2],
+  #   [ 0, 1] ]
+  #
   def initialize(mat)
     @mat = mat
   end
@@ -21,6 +29,8 @@ class Matrix
     @mat[0].length
   end
 
+  # Add {self} to matrix {m}
+  # @param m Matrix
   def add(m)
     m1 = @mat
     m2 = m.mat
@@ -33,7 +43,9 @@ class Matrix
     end
     Matrix.new(sum)
   end
-  
+
+  # Multiply {self} and matrix {b}
+  # @param m Matrix
   def product(b)
     n = self.rows
     m = self.columns
@@ -53,54 +65,87 @@ end
 ## 
 ## Statements
 ## 
-class Statement
-  def executeStatement(store)
-    raise :error
-  end
-end
+
+# All statements have a method, {executeStatement}, that accept an
+# interpreter as its argument.  The {executeStatement} method then
+# performs the necessary work to execute the statement.
 
 class StoreStatement
-  def initialize(a,matrix)
-    @a = a
+       
+  # Construct a "store { a } { <matrix> }" statement
+  # @param targetVar [String] The variable being stored into
+  # @param matrix [Matrix] The matrix being stored
+  def initialize(targetVar,matrix)
+    @target = targetVar
     @matrix = matrix
   end
   
-  def executeStatement(store)
-    
+  # Execute a store statement by taking the interpreter's environment,
+  # and updating it to have add the key,value pair
+  # {(@target => @matrix)}.
+  def executeStatement(interpreter)
+    interpreter.environment[@target] = @matrix
   end
 end
 
 class AddStatement
-  attr_reader :a
-  attr_reader :b
-  attr_reader :to
-  
-  def initialize(a,b,to)
-    @a = a
-    @b = b
-    @to = to
-  end
-end
-
-class PrintStatement
-  def initialize(a)
-    @a = a
+  # Construct an "add { a } { b } { c }" operation that adds matrices
+  # a and b, and leaves the result in C.
+  # @param operand1 [String] operand 1 variable name
+  # @param operand2 [String] operand 2 variable name
+  # @param resultVar [String] variable to store result
+  def initialize(operand1,operand2,resultVar)
+    @operand1 = operand1
+    @operand2 = operand2
+    @resultVar = resultVar
   end
   
-  def executeStatement(store)
-    puts "printing `#{@a}`"
+  # Execute a statement by taking the interpreter's environment,
+  # looking up operand 1, looking up operand 2, and leaving the result
+  # in C.
+  def executeStatement(interpreter)
+    env = interpreter.environment
+    env[@resultVar] = env[@operand1].add(env[@operand2])
   end
 end
 
 class MultiplyStatement
-  attr_reader :a
-  attr_reader :b
-  attr_reader :to
+  # Construct a "multiply { a } { b } { c }" operation that adds matrices
+  # a and b, and leaves the result in C.
+  def initialize(operand1,operand2,resultVar)
+    @operand1 = operand1
+    @operand2 = operand2
+    @resultVar = resultVar
+  end
+
+  # Similar to add...
+  def executeStatement(interpreter)
+    env = interpreter.environment
+    env[@resultVar] = env[@operand1].product(env[@operand2])
+  end
+end
+
+class PrintStatement
+  # Construct a "print { a }" statement
+  def initialize(varName)
+    @varName = varName
+  end
   
-  def initialize(a,b,to)
-    @a = a
-    @b = b
-    @to = to
+  # Turn a matrix object into a string
+  # @param matrix The matrix to convert
+  def matrixToString(matrix)
+    string = ""
+    matrix.rows.times do |i|
+      string = string + "| "
+      matrix.columns.times { |j| string = string + matrix.mat[i][j].to_s + " " }
+      string = string + "|\n"
+    end
+    string
+  end
+  
+  def executeStatement(interpreter)
+    matrix = interpreter.environment[@varName]
+    puts "#{@varName}:", matrixToString(matrix)
   end
 end
 
@@ -108,14 +153,20 @@ end
 ## Parsing
 ## 
 class Parser
+  # The filename being parsed
   attr :filename
+  # The array of `{Print,Add,...}Statement` objects
   attr_reader :statements
+  # The lines of the files
+  attr_reader :lines
   
   def initialize(filename)
     @filename = filename
     @statements = []
   end
-  
+
+  # Take a string like " [ [ 1 0 ] [ 0 1 ] ] " and turn it into a
+  # {Matrix} object.
   def parseMatrix(str)
     matrix = []
     str.scan(/\[((\s*\d\s*)+)\]/).each do |capture|
@@ -123,7 +174,7 @@ class Parser
       capture[0].split.each { |column| columns << column.to_i }
       matrix << columns
     end
-    matrix
+    Matrix.new(matrix)
   end
   
   def parseStatement(statement)
@@ -155,7 +206,8 @@ class Parser
   
   def parseStatements
     i = 0
-    File.readlines(@filename).each do |line|
+    @lines = File.readlines(@filename)
+    @lines.each do |line|
       i = i+1
       statement = parseStatement(line)
       if statement then
@@ -173,15 +225,33 @@ end
 ##
 
 class Interpreter
+  attr_accessor :environment
+  
+  # Construct an interpreter object
   def initialize(parser)
     @parser = parser
     @environment = {}
   end
   
-  def run 
-    @parser.statements.each { |x|
-      puts x.inspect
-    }
+  def run
+    # First, parse all of the statements
+    @parser.parseStatements
+    line = 0
+    # Next, execute each in turn
+    @parser.statements.each do |statement|
+      line = line+1
+      # Attempt to execute the statement
+      begin
+        statement.executeStatement(self)
+        # For debugging
+        # puts "#{@parser.lines[line-1]}"        
+        # @environment.each { |k,v| puts "#{k.inspect} #{v.inspect}"}
+      rescue
+        # If failed, tell user which line caused the problem
+        puts "Error in #{@parser.filename} on line #{line}:",
+             "#{@parser.lines[line-1]}"
+      end
+    end
   end
 end
 
@@ -195,7 +265,6 @@ def main
   end
   filename = ARGV[0]
   parser = Parser.new(filename)
-  parser.parseStatements
   Interpreter.new(parser).run
 end
 
