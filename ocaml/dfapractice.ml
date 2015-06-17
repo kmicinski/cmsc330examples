@@ -65,7 +65,7 @@ let checkAccepts str dfa =
       | [] -> failwith "no transition defined"
     in
     find_state dfa.transitions
-
+      a
 
 
 
