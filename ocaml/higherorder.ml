@@ -157,8 +157,8 @@ let x = (fun y -> 23) (loop 23)
      - Evaluate the result
    
    So we do:
-     - Evalute e1:
-       - Evalute e1's argument to a value, which it already is (fun x -> x + 1)
+     - Evaluate e1:
+       - Evaluate e1's argument to a value, which it already is (fun x -> x + 1)
        - Apply e1's argument to (fun y -> y)
        - Get (fun x -> x + 1), which is v1
      - Evaluate e1's argument: 
@@ -173,7 +173,7 @@ let x = (fun y -> 23) (loop 23)
    application before you're allowed to end the computation.
 
    If it's confusing to you, remember that 23 + 1 is just syntax for
-   something like `plus 23 1`, where `plus` is a builtin plus operator
+   something like `plus 23 1`, where `plus` is a built in plus operator
    for integers that has type `int -> int -> int`.
  *)
 
@@ -188,7 +188,7 @@ let x = (fun x -> "hello") loop
    loop x`.  So when we evaluate:
 
     (fun x -> "hello") loop
-    =                                         (evalute argument)
+    =                                         (evaluate argument)
     (fun x -> "hello") (fun x -> loop x)
     =                                         (reduction)
     "hello"
@@ -380,7 +380,7 @@ let fib x =
    you'll know that creating a stack frame potentially wastes space.
    It turns out there's a nice way to optimize tail calls that
    basically just turns them into loops.  Here's another way we could
-   write the fibonacci function:
+   write the Fibonacci function:
 *)
 
 let tailrecfib x =
@@ -390,10 +390,10 @@ let tailrecfib x =
   in
   h 1 1 1
     
-(* Now, it's not obvious that this computes the fibonacci sequence.  I
+(* Now, it's not obvious that this computes the Fibonacci sequence.  I
    have to admit, I personally had to think hard about this for a
    minute or two.  To see why it does, let's think about how I would
-   compute the fibonacci sequence by hand.
+   compute the Fibonacci sequence by hand.
    
      1 1 2
       \|\| 
@@ -429,9 +429,9 @@ let tailrecfib x =
    Note that everything here is just threading the state through `h`,
    like we've seen previously, just more complex.
 
-   You see, this is because fibonacci is not a function only of the
+   You see, this is because Fibonacci is not a function only of the
    last number in the sequence.  Because if it were, we could easily
-   make a tail recursive function out of it.  Instead, the fibonacci
+   make a tail recursive function out of it.  Instead, the Fibonacci
    function is a function of the last **two** elements in the
    sequence.
 
@@ -514,7 +514,7 @@ let sum_list' (l : 'a list) =
    
    ( ( (0 * x1) * x2) * x3)
 
-   Insted, we need to use 1.  Notice that 0 is the identity for +, and
+   Instead, we need to use 1.  Notice that 0 is the identity for +, and
    1 is the identity for *.
    
    So, now we're going to generalize what our function does:
@@ -569,7 +569,7 @@ let filter l = fold (fun acc next -> failwith "undefined") [] l
  *)
 let filter = fold (fun acc next -> failwith "undefined") []
 
-(* Now (using fold) define a function filter, that accpets an
+(* Now (using fold) define a function filter, that accepts an
    arbitrary predicate f (a function from 'a -> bool), and removes
    from a list `l` every element e, for which (f e = false)
 *)
