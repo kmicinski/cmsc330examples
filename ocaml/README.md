@@ -17,3 +17,6 @@ programming with OCaml.  This material is presented in
 - June 17th: Higher order functional programming and reduction
       - [`higherorder.ml`](higherorder.ml)
 
+- June 18th: Understanding OCaml's type system and type inference
+      - [`types.ml`](types.ml)
+      - Buffers from class: [`typeslec.ml`](typeslec.ml) [`typeslec2.ml`](typeslec2.ml)
