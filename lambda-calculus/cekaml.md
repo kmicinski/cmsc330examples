@@ -40,35 +40,35 @@ a list of (variable, mvalue) pairs.
 
 The **continuation** will have several possibilities:
 
-- Done: Do nothing after this
+- `Done`: Do nothing after this
 
-- EArg(t, E, K): Evaluate a function's argument, in the context of
+- `EArg(t, E, K)`: Evaluate a function's argument, in the context of
   environment E
 
-- ECall(\x. t, E, K): Call the function `\x. t` with environment E and
+- `ECall(\x. t, E, K)`: Call the function `\x. t` with environment E and
   do K afterwards
 
-- DecideTF(t1,t2,E,K): Next decide whether the current thing is true
+- `DecideTF(t1,t2,E,K)`: Next decide whether the current thing is true
   or false.  If it's true, start executing t1, if it's false start
   executing t2, do it in the environment of E with continuation K.
 
-- EVariant(name,evaluated_args,next_args,E,K): In the expression
+- `EVariant(name,evaluated_args,next_args,E,K)`: In the expression
     
     Ctr (t1,....,tn)
   
   We are evaluating some tk (where 0 < k <= n), and have already
-  evaluated t1...t(k-1), whose results are sitting in evaluated_args.
-  Next is t(k+1)...tn, sitting in next_args, evaluate each of those in
+  evaluated `t1...t(k-1)`, whose results are sitting in `evaluated_args`.
+  Next is `t(k+1)...tn`, sitting in `next_args`, evaluate each of those in
   the context of E, and then do K. After that, take the resulting
   mvalues and form a variant from them.
 
-- EBArg(evaluated_args,next_args,E,K): In the expression
+- `EBArg(evaluated_args,next_args,E,K)`: In the expression
 
          + t1 t2 ... tn
 
   Currently evaluating tk (where 0 < k <= n), and have already
-  evaluated t1...t(k-1), whose results are sitting in evaluated_args.
-  Next is t(k+1)...tn, sitting in next_args, evaluate each of those 
+  evaluated `t1...t(k-1)`, whose results are sitting in `evaluated_args`.
+  Next is `t(k+1)...tn`, sitting in `next_args`, evaluate each of those 
   in the context of E, and then do K.
   
 
@@ -81,8 +81,6 @@ function creates a machine state with e, the empty environment, and
 the `Done` continuation:
 
     inject(e) = < e, [] , Done>
-
-# Final states
 
 # Step function
 
