@@ -62,15 +62,16 @@ The **continuation** will have several possibilities:
   the context of E, and then do K. After that, take the resulting
   mvalues and form a variant from them.
 
-- `EBArg(evaluated_args,next_args,E,K)`: In the expression
+- `EBArg(bi,evaluated_args,next_args,E,K)`: In the expression
 
          + t1 t2 ... tn
 
   Currently evaluating tk (where 0 < k <= n), and have already
   evaluated `t1...t(k-1)`, whose results are sitting in `evaluated_args`.
   Next is `t(k+1)...tn`, sitting in `next_args`, evaluate each of those 
-  in the context of E, and then do K.
-  
+  in the context of E, and then do K.  `bi` represents the specific operator,  
+  in this case it's plus.
+
 
 We'll explain these again later when we show the machine rules.
 
