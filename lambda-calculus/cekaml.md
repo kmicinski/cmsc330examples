@@ -124,7 +124,7 @@ We step to evauate `t1` and evaluate `t2` later:
 If we are calling with a lambda term, we need to make a closure and
 then *step into* the body:
 
-    < (\x. t) , E , Call((\y. t'),E',K) > --> < t, { y |-> [ (\x. t), E ] } :: E', K >
+    < (\x. t) , E , Call((\y. t'),E',K) > --> < t', { y |-> [ (\x. t), E ] } :: E', K >
 
 Carefully note how the environments get swapped around.
 
@@ -132,7 +132,7 @@ Carefully note how the environments get swapped around.
 
 Then no closure is necessary 
 
-    < v , E , Call((\y. t'),E',K) > --> < t, { y |-> v } :: E', K >
+    < v , E , Call((\y. t'),E',K) > --> < t', { y |-> v } :: E', K >
 
 ## Evaluating a let binding
 
