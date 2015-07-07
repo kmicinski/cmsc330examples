@@ -1,5 +1,10 @@
 # CMSC 330 - Project 3 
 
+# Errata
+
+- 07/07/15 -- Small typos in call rule
+- 07/07/15 -- **important** error in "fix" rule, fixed now
+
 In this project, we will extend the CEK machine to handle a core
 subset of OCaml.  In the lambda calculus, the terms were:
 
@@ -241,7 +246,9 @@ In our syntax, `let rec f x = t` will be represented as
 
 Its implementation is simple:
 
-    <fix f in (\x. t), E, K> --> <t, {f |-> [(\x. t),E]}::E, K >
+    <fix f in (\x. t), E, K> --> <t, {f |-> [fix f in (\x. t),E]}::E, K >
+
+**Important errata**: In a previous version of this document, the "fix f in" in the conclusion of the above rule was left out.  This will cause errors for your implementation.
 
 ## End of the rules
 
