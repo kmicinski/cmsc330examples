@@ -4,6 +4,7 @@
 
 - 07/07/15 -- Small typos in call rule
 - 07/07/15 -- **important** error in "fix" rule, fixed now
+- 07/08/15 -- Fixed EBArg if case
 
 In this project, we will extend the CEK machine to handle a core
 subset of OCaml.  In the lambda calculus, the terms were:
@@ -199,7 +200,7 @@ The place where the empty list is, is the set of things we've
 evaluated so far.  To go to the next one, we have another rule:
 
         <mv, E, EBArg(op,l,[tk,...,tn],E',K)> 
-    --> <tk, E', EBArg(op,l@mv,[t(k+1),...,tn],E,K)
+    --> <tk, E', EBArg(op,l@mv,[t(k+1),...,tn],E',K)
 
 And then a rule to end the computation:
 
