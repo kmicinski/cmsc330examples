@@ -1,5 +1,11 @@
 # CMSC 330 - Project 3 
 
+# Errata
+
+- 07/07/15 -- Small typos in call rule
+- 07/07/15 -- **important** error in "fix" rule, fixed now
+- 07/08/15 -- Fixed EBArg if case
+
 In this project, we will extend the CEK machine to handle a core
 subset of OCaml.  In the lambda calculus, the terms were:
 
@@ -62,15 +68,16 @@ The **continuation** will have several possibilities:
   the context of E, and then do K. After that, take the resulting
   mvalues and form a variant from them.
 
-- `EBArg(evaluated_args,next_args,E,K)`: In the expression
+- `EBArg(bi,evaluated_args,next_args,E,K)`: In the expression
 
          + t1 t2 ... tn
 
   Currently evaluating tk (where 0 < k <= n), and have already
   evaluated `t1...t(k-1)`, whose results are sitting in `evaluated_args`.
   Next is `t(k+1)...tn`, sitting in `next_args`, evaluate each of those 
-  in the context of E, and then do K.
-  
+  in the context of E, and then do K.  `bi` represents the specific operator,  
+  in this case it's plus.
+
 
 We'll explain these again later when we show the machine rules.
 
@@ -123,7 +130,7 @@ We step to evauate `t1` and evaluate `t2` later:
 If we are calling with a lambda term, we need to make a closure and
 then *step into* the body:
 
-    < (\x. t) , E , Call((\y. t'),E',K) > --> < t, { y |-> [ (\x. t), E ] } :: E', K >
+    < (\x. t) , E , Call((\y. t'),E',K) > --> < t', { y |-> [ (\x. t), E ] } :: E', K >
 
 Carefully note how the environments get swapped around.
 
@@ -131,7 +138,7 @@ Carefully note how the environments get swapped around.
 
 Then no closure is necessary 
 
-    < v , E , Call((\y. t'),E',K) > --> < t, { y |-> v } :: E', K >
+    < v , E , Call((\y. t'),E',K) > --> < t', { y |-> v } :: E', K >
 
 ## Evaluating a let binding
 
@@ -193,7 +200,7 @@ The place where the empty list is, is the set of things we've
 evaluated so far.  To go to the next one, we have another rule:
 
         <mv, E, EBArg(op,l,[tk,...,tn],E',K)> 
-    --> <tk, E', EBArg(op,l@mv,[t(k+1),...,tn],E,K)
+    --> <tk, E', EBArg(op,l@mv,[t(k+1),...,tn],E',K)
 
 And then a rule to end the computation:
 
@@ -240,7 +247,9 @@ In our syntax, `let rec f x = t` will be represented as
 
 Its implementation is simple:
 
-    <fix f in (\x. t), E, K> --> <t, {f |-> [(\x. t),E]}::E, K >
+    <fix f in (\x. t), E, K> --> <t, {f |-> [fix f in (\x. t),E]}::E, K >
+
+**Important errata**: In a previous version of this document, the "fix f in" in the conclusion of the above rule was left out.  This will cause errors for your implementation.
 
 ## End of the rules
 
