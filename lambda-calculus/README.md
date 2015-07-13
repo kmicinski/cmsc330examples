@@ -1,7 +1,7 @@
 # Lectures on the lambda calculus and semantics
 
 - [`lambda.ml`](lambda.ml) -- The lambda calculus 
-  - [`lambdaprac.ml`] -- Buffer from class
+  - [`lambdaprac.ml`](lambdaprac.ml) -- Buffer from class
 
 - [`untyped-caml.ml`](untyped-caml.ml) -- Big step interpreter for the
   untyped lambda calculus, using substitution.
