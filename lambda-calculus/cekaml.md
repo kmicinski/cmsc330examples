@@ -204,7 +204,7 @@ evaluated so far.  To go to the next one, we have another rule:
 
 And then a rule to end the computation:
 
-    if [|op l|] = v
+    if [|op l'|] = v
     <mv,E,EBarg(op,l,[],E',K)> --> <v,E',K>
 
 The notation `[|op l|]` means take the list of arguments to the
