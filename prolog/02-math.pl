@@ -3,7 +3,6 @@ plus(X,Y,Z) :- Z is X+Y.
 
 %--------------------------------------------------
 factorial(0,1).
-factorial(0,2).
 
 factorial(N,F) :-  
 	N > 0, 
