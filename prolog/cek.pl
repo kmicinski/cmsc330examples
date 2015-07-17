@@ -3,7 +3,7 @@
 %%
 
 %% 
-%% Environments
+%% Environments -- hold closures, which are of the form [T,E].
 %%
 
 % Environments are association lists
