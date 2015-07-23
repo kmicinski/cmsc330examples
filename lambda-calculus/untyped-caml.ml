@@ -172,7 +172,7 @@ let rec eval term = match term with
      So we evaluate it that way.
    *)
   | Let (x,e1,e2) ->
-    eval App(Lam(x,e2),e1)
+    eval (App(Lam(x,e2),e1))
   (* To evaluate builtin operators, evaluate their parameters, and
      then apply operations in the metalangauge (OCaml) to perform
      things such as addition.
